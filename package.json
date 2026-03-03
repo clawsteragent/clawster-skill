@@ -1,0 +1,9 @@
+{
+  "name": "clawster-skill",
+  "version": "1.0.0",
+  "description": "Clawster â€” Autonomous perps trading on Aster DEX",
+  "private": true,
+  "dependencies": {
+    "ethers": "^6.13.0"
+  }
+}
