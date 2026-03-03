@@ -8,29 +8,29 @@ description: >
   'trading agent', 'PnL', 'open position', 'close position', 'set leverage'.
 ---
 
-# Clawster â€” Autonomous Perps Trading on Aster DEX
+# Clawster Ã¢â‚¬" Autonomous Perps Trading on Aster DEX
 
 ## Overview
 
-Clawster turns any OpenClaw agent into an autonomous perpetual futures trader on [Aster DEX](https://asterdex.com). The agent reasons about markets, makes trade decisions, and executes them â€” all through natural language + API calls.
+Clawster turns any OpenClaw agent into an autonomous perpetual futures trader on [Aster DEX](https://asterdex.com). The agent reasons about markets, makes trade decisions, and executes them Ã¢â‚¬" all through natural language + API calls.
 
 **Requirements:**
 - A BSC wallet with BNB for gas (used to register on ERC-8004)
 - Aster DEX API key + secret (generated after connecting wallet to Aster)
 - Node.js 18+ (for setup/utility scripts)
 
-**Supported pairs:** All Aster trading pairs â€” BTCUSDT, ETHUSDT, BNBUSDT, SOLUSDT, and more.
+**Supported pairs:** All Aster trading pairs Ã¢â‚¬" BTCUSDT, ETHUSDT, BNBUSDT, SOLUSDT, and more.
 
-## One Wallet â€” How It Works
+## One Wallet Ã¢â‚¬" How It Works
 
-Clawster uses a **single BSC wallet** for everything â€” on-chain identity and trading. The same wallet that registers your agent on ERC-8004 is the one you connect to Aster DEX.
+Clawster uses a **single BSC wallet** for everything Ã¢â‚¬" on-chain identity and trading. The same wallet that registers your agent on ERC-8004 is the one you connect to Aster DEX.
 
 - **Registers** your agent as an ERC-8004 NFT on BSC
 - **Connects** to Aster DEX for perpetual futures trading
 - **Holds** BNB (for gas) + USDT (trading capital)
 - **Controlled** via private key (identity) and Aster API key + secret (trading)
 
-**Flow:** Your BSC wallet registers an agent on ERC-8004 â†’ You connect the same wallet to Aster DEX â†’ Deposit USDT to Aster â†’ Generate API key + secret â†’ Start trading.
+**Flow:** Your BSC wallet registers an agent on ERC-8004 Ã¢" ' You connect the same wallet to Aster DEX Ã¢" ' Deposit USDT to Aster Ã¢" ' Generate API key + secret Ã¢" ' Start trading.
 
 ## Setup
 
@@ -38,13 +38,13 @@ Clawster uses a **single BSC wallet** for everything â€” on-chain identity 
 
 You need a BSC (BNB Smart Chain) wallet with BNB balance for gas. This wallet becomes the **owner** of your agent's on-chain identity.
 
-- Use a **dedicated wallet** â€” do not use your main wallet
+- Use a **dedicated wallet** Ã¢â‚¬" do not use your main wallet
 - Needs ~0.005 BNB for the registration transaction
 - The private key is used once during setup to send the registration TX
 
 ### Step 2: Register on ERC-8004 (Automatic)
 
-Run the setup script â€” it handles registration automatically:
+Run the setup script Ã¢â‚¬" it handles registration automatically:
 
 ```bash
 cd skill/clawster
@@ -70,16 +70,16 @@ Connect the **same BSC wallet** to Aster DEX and deposit trading capital:
 3. Deposit USDT (BEP-20) via the Aster DEX interface
 4. Your USDT is now available for trading on Aster
 
-### Step 4: Generate API Key (âš ï¸ MANUAL)
+### Step 4: Generate API Key (Ã¢Å¡Â Ã¯Â¸Â MANUAL)
 
 > **This step MUST be done manually in your browser.**
 
 1. Go to **https://www.asterdex.com/en/api-management**
 2. Click **"ENABLE FUTURES"**
 3. Click **Save** / **Approve**
-4. **Copy the API Key and Secret immediately â€” the secret is shown ONLY ONCE!**
+4. **Copy the API Key and Secret immediately Ã¢â‚¬" the secret is shown ONLY ONCE!**
 
-âš ï¸ **Do NOT close the page before copying your secret. It cannot be retrieved later.**
+Ã¢Å¡Â Ã¯Â¸Â **Do NOT close the page before copying your secret. It cannot be retrieved later.**
 
 ### Step 5: Store Aster API Credentials
 
@@ -96,7 +96,7 @@ Or use environment variables: `ASTER_API_KEY`, `ASTER_API_SECRET`
 
 ### Step 6: Configure Trading Parameters
 
-Set these in TOOLS.md under a `### Clawster Config` section. All parameters are optional â€” sane defaults apply if not configured. See the **Risk Configuration** section below for full details on each parameter.
+Set these in TOOLS.md under a `### Clawster Config` section. All parameters are optional Ã¢â‚¬" sane defaults apply if not configured. See the **Risk Configuration** section below for full details on each parameter.
 
 ```markdown
 ### Clawster Config
@@ -200,12 +200,12 @@ Adjust stops, take partials, or close based on evolving market conditions.
 Write to `memory/trades-YYYY-MM-DD.md`:
 
 ```markdown
-## BTCUSDT LONG â€” 2026-03-02 14:30 PST
+## BTCUSDT LONG Ã¢â‚¬" 2026-03-02 14:30 PST
 - Entry: $97,250 | Size: 0.01 BTC | Leverage: 10x
 - Stop: $96,500 | TP: $99,000
 - Reasoning: Bullish RSI divergence on 15m, negative funding
 - Status: OPEN
-- PnL: â€”
+- PnL: Ã¢â‚¬"
 ```
 
 Update `MEMORY.md` with cumulative stats.
@@ -236,7 +236,7 @@ All risk parameters are **customizable per user** via the `### Clawster Config` 
 | `max_leverage` | `10` | Maximum leverage multiplier. Scalpers may increase to 20 |
 | `max_position_pct` | `20` | Max position size per trade as % of account balance |
 | `max_concurrent` | `3` | Max number of open positions at once. Reduce if account < $1000 |
-| `stop_loss` | `required` | Whether stop loss is required on every trade. **âš ï¸ WARNING: Setting this to anything other than `required` removes your primary loss protection. You can lose your entire position. Do not disable unless you fully understand the risk.** |
+| `stop_loss` | `required` | Whether stop loss is required on every trade. **Ã¢Å¡Â Ã¯Â¸Â WARNING: Setting this to anything other than `required` removes your primary loss protection. You can lose your entire position. Do not disable unless you fully understand the risk.** |
 | `daily_loss_pct` | `5` | Max daily loss as % of account. Trading stops when hit |
 | `max_drawdown_pct` | `15` | Max total drawdown as % of account. Agent pauses and reassesses |
 | `max_risk_per_trade` | `2` | Max risk per trade as % of account balance |
@@ -249,12 +249,12 @@ All risk parameters are **customizable per user** via the `### Clawster Config` 
 
 **Position sizing formula:**
 ```
-size = (account_balance Ã— max_position_pct / 100) / entry_price Ã— leverage
+size = (account_balance Ãƒ"” max_position_pct / 100) / entry_price Ãƒ"” leverage
 ```
 
 **Risk per trade:**
 ```
-risk = position_size Ã— (entry - stop_loss) / entry
+risk = position_size Ãƒ"” (entry - stop_loss) / entry
 ```
 Must stay under `max_risk_per_trade` % of account.
 
@@ -350,7 +350,7 @@ After each trading day, review:
 
 Without MCP, use `fetch()` or `curl` with HMAC-SHA256 auth. See [references/aster-api.md](references/aster-api.md).
 
-## Quick Reference â€” Common Operations
+## Quick Reference Ã¢â‚¬" Common Operations
 
 **Check price:** `GET /ticker/price?symbol=BTCUSDT`
 
