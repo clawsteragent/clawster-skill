@@ -1,14 +1,7 @@
 #!/usr/bin/env node
-// Clawster Balance Check â€” View Aster DEX account balances and positions
+// CLAWSTER Balance Check — View Aster DEX account balances and positions
 // Usage: node check-balance.js
 // Reads credentials from env vars (ASTER_API_KEY, ASTER_API_SECRET) or TOOLS.md
-
-// â”€â”€â”€ Node.js Version Check â”€â”€â”€
-const [major] = process.versions.node.split('.').map(Number);
-if (major < 18) {
-  console.error(`\nâŒ Node.js 18+ is required (you have ${process.version}). Please upgrade.\n`);
-  process.exit(1);
-}
 
 const crypto = require('crypto');
 const fs = require('fs');
@@ -54,24 +47,24 @@ function fmt(num, decimals = 2) {
 async function main() {
   const creds = getCredentials();
   if (!creds) {
-    console.log('âŒ No credentials found.');
+    console.log('❌ No credentials found.');
     console.log('   Set ASTER_API_KEY and ASTER_API_SECRET env vars, or run setup-agent.js');
     process.exit(1);
   }
 
-  console.log('\nðŸ¾ Clawster â€” Aster DEX Account Overview\n');
-  console.log('â”€'.repeat(50));
+  console.log('\n🐾 CLAWSTER — Aster DEX Account Overview\n');
+  console.log('─'.repeat(50));
 
   // Fetch account
   const account = await authFetch('/account', {}, creds.apiKey, creds.apiSecret);
   if (account.code && account.code < 0) {
-    console.log(`âŒ API Error: ${account.msg}`);
+    console.log(`❌ API Error: ${account.msg}`);
     process.exit(1);
   }
 
   // Balances
-  console.log('\nðŸ’° BALANCES');
-  console.log('â”€'.repeat(50));
+  console.log('\n💰 BALANCES');
+  console.log('─'.repeat(50));
   console.log(`  Wallet Balance:     $${fmt(account.totalWalletBalance)}`);
   console.log(`  Unrealized PnL:     $${fmt(account.totalUnrealizedProfit)}`);
   console.log(`  Margin Balance:     $${fmt(account.totalMarginBalance)}`);
@@ -88,14 +81,14 @@ async function main() {
 
   // Positions
   const positions = (account.positions || []).filter(p => parseFloat(p.positionAmt) !== 0);
-  console.log(`\nðŸ“Š OPEN POSITIONS (${positions.length})`);
-  console.log('â”€'.repeat(50));
+  console.log(`\n📊 OPEN POSITIONS (${positions.length})`);
+  console.log('─'.repeat(50));
 
   if (positions.length === 0) {
     console.log('  No open positions');
   } else {
     for (const p of positions) {
-      const side = parseFloat(p.positionAmt) > 0 ? 'ðŸŸ¢ LONG' : 'ðŸ”´ SHORT';
+      const side = parseFloat(p.positionAmt) > 0 ? '🟢 LONG' : '🔴 SHORT';
       const pnl = parseFloat(p.unrealizedProfit);
       const pnlStr = pnl >= 0 ? `+$${fmt(pnl)}` : `-$${fmt(Math.abs(pnl))}`;
       console.log(`\n  ${p.symbol} ${side}`);
@@ -112,16 +105,16 @@ async function main() {
   // Fetch open orders
   const orders = await authFetch('/openOrders', {}, creds.apiKey, creds.apiSecret);
   if (Array.isArray(orders) && orders.length > 0) {
-    console.log(`\nðŸ“‹ OPEN ORDERS (${orders.length})`);
-    console.log('â”€'.repeat(50));
+    console.log(`\n📋 OPEN ORDERS (${orders.length})`);
+    console.log('─'.repeat(50));
     for (const o of orders) {
-      const typeLabel = o.type.includes('STOP') ? 'â›”' : o.type.includes('TAKE_PROFIT') ? 'ðŸŽ¯' : 'ðŸ“';
+      const typeLabel = o.type.includes('STOP') ? '⛔' : o.type.includes('TAKE_PROFIT') ? '🎯' : '📝';
       console.log(`  ${typeLabel} ${o.symbol} ${o.side} ${o.type} qty:${o.origQty} price:${o.price || o.stopPrice}`);
     }
   }
 
-  console.log('\n' + 'â”€'.repeat(50));
+  console.log('\n' + '─'.repeat(50));
   console.log(`  Updated: ${new Date().toISOString()}\n`);
 }
 
-main().catch(e => { console.error(`âŒ ${e.message}`); process.exit(1); });
+main().catch(e => { console.error(`❌ ${e.message}`); process.exit(1); });

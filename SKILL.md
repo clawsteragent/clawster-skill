@@ -1,367 +1,216 @@
 ---
-name: clawster
+name: CLAWSTER
 description: >
   Autonomous perpetual futures trading on Aster DEX for ERC-8004 registered AI agents.
   Use when: setting up a trading agent, executing trades on Aster DEX, managing positions,
   checking PnL, configuring trading strategies, or any perpetual futures trading task.
-  Triggers: 'trade', 'aster', 'perpetual', 'futures', 'position', 'leverage', 'clawster',
+  Triggers: 'trade', 'aster', 'perpetual', 'futures', 'position', 'leverage', 'CLAWSTER',
   'trading agent', 'PnL', 'open position', 'close position', 'set leverage'.
 ---
 
-# Clawster Ã¢â‚¬" Autonomous Perps Trading on Aster DEX
+# CLAWSTER — Autonomous Perps Trader
 
-## Overview
+You are an autonomous perpetual futures trader on Aster DEX. Read config, analyze markets, execute trades, manage risk, and log everything. No human in the loop unless risk limits are breached.
 
-Clawster turns any OpenClaw agent into an autonomous perpetual futures trader on [Aster DEX](https://asterdex.com). The agent reasons about markets, makes trade decisions, and executes them Ã¢â‚¬" all through natural language + API calls.
+## Prerequisites
 
-**Requirements:**
-- A BSC wallet with BNB for gas (used to register on ERC-8004)
-- Aster DEX API key + secret (generated after connecting wallet to Aster)
-- Node.js 18+ (for setup/utility scripts)
+Before trading, verify these exist in TOOLS.md:
+- **Aster API Key & Secret** — under `### Aster DEX` or env vars `ASTER_API_KEY`/`ASTER_API_SECRET`
+- **Agent ID** — registered on ERC-8004 during install (run `node install.js` if missing)
+- **Trading config** — under `### Clawster Config` (defaults apply if missing)
 
-**Supported pairs:** All Aster trading pairs Ã¢â‚¬" BTCUSDT, ETHUSDT, BNBUSDT, SOLUSDT, and more.
+If API credentials are missing, stop and notify the user. Do not trade without credentials.
 
-## One Wallet Ã¢â‚¬" How It Works
+## Skill Dependencies
 
-Clawster uses a **single BSC wallet** for everything Ã¢â‚¬" on-chain identity and trading. The same wallet that registers your agent on ERC-8004 is the one you connect to Aster DEX.
+Read these skills on demand — do not duplicate their content:
 
-- **Registers** your agent as an ERC-8004 NFT on BSC
-- **Connects** to Aster DEX for perpetual futures trading
-- **Holds** BNB (for gas) + USDT (trading capital)
-- **Controlled** via private key (identity) and Aster API key + secret (trading)
+| Skill | Read when |
+|-------|-----------|
+| `aster-api-auth-v1` | Before ANY authenticated API call (HMAC signing, headers) |
+| `aster-api-trading-v1` | Before placing, canceling, or modifying orders |
+| `aster-api-market-data-v1` | Before fetching prices, klines, depth, funding |
+| `aster-api-account-v1` | Before checking balance, positions, or account info |
+| `aster-api-websocket-v1` | When setting up real-time price/position streams |
+| `aster-api-errors-v1` | When handling API errors or rate limits |
+| `aster-deposit-fund` | When depositing funds to Aster |
 
-**Flow:** Your BSC wallet registers an agent on ERC-8004 Ã¢" ' You connect the same wallet to Aster DEX Ã¢" ' Deposit USDT to Aster Ã¢" ' Generate API key + secret Ã¢" ' Start trading.
+Default: use v1 (HMAC with API key/secret). Use v3 only if your setup requires EIP-712 wallet signing.
 
-## Setup
+## Config Schema
 
-### Step 1: Provide BSC Private Key
-
-You need a BSC (BNB Smart Chain) wallet with BNB balance for gas. This wallet becomes the **owner** of your agent's on-chain identity.
-
-- Use a **dedicated wallet** Ã¢â‚¬" do not use your main wallet
-- Needs ~0.005 BNB for the registration transaction
-- The private key is used once during setup to send the registration TX
-
-### Step 2: Register on ERC-8004 (Automatic)
-
-Run the setup script Ã¢â‚¬" it handles registration automatically:
-
-```bash
-cd skill/clawster
-npm install
-node scripts/setup-agent.js
-```
-
-The script will:
-1. Ask for your BSC private key
-2. Check your BNB balance
-3. Send a `register(tokenURI)` transaction to the ERC-8004 registry (`0x8004A169FB4a3325136EB29fA0ceB6D2e539a432`)
-4. Wait for confirmation and extract your `agentId` from the Transfer event
-5. Print: `Agent #<id> registered on ERC-8004`
-
-See [references/erc8004-auth.md](references/erc8004-auth.md) for technical details.
-
-### Step 3: Connect Wallet & Deposit USDT (Manual)
-
-Connect the **same BSC wallet** to Aster DEX and deposit trading capital:
-
-1. Go to [asterdex.com](https://asterdex.com) and connect your BSC wallet
-2. This is the same wallet used for ERC-8004 registration
-3. Deposit USDT (BEP-20) via the Aster DEX interface
-4. Your USDT is now available for trading on Aster
-
-### Step 4: Generate API Key (Ã¢Å¡Â Ã¯Â¸Â MANUAL)
-
-> **This step MUST be done manually in your browser.**
-
-1. Go to **https://www.asterdex.com/en/api-management**
-2. Click **"ENABLE FUTURES"**
-3. Click **Save** / **Approve**
-4. **Copy the API Key and Secret immediately Ã¢â‚¬" the secret is shown ONLY ONCE!**
-
-Ã¢Å¡Â Ã¯Â¸Â **Do NOT close the page before copying your secret. It cannot be retrieved later.**
-
-### Step 5: Store Aster API Credentials
-
-Add your credentials to `TOOLS.md`:
-
-```markdown
-### Aster DEX
-- API Key: `your-api-key`
-- API Secret: `your-api-secret`
-- Base URL: `https://fapi.asterdex.com/fapi/v1`
-```
-
-Or use environment variables: `ASTER_API_KEY`, `ASTER_API_SECRET`
-
-### Step 6: Configure Trading Parameters
-
-Set these in TOOLS.md under a `### Clawster Config` section. All parameters are optional Ã¢â‚¬" sane defaults apply if not configured. See the **Risk Configuration** section below for full details on each parameter.
-
-```markdown
-### Clawster Config
-- agent_id: 42
-- trading_pairs: BTCUSDT, ETHUSDT
-- max_leverage: 10
-- max_position_pct: 20
-- max_concurrent: 3
-- stop_loss: required
-- daily_loss_pct: 5
-- max_drawdown_pct: 15
-- max_risk_per_trade: 2
-- cooldown_after_losses: 3
-- cooldown_minutes: 60
-- max_daily_trades: 50
-- strategy: trend_follower
-```
-
-## Trading Workflow
-
-This is the core loop. Execute it manually or via cron.
-
-### Step 1: Fetch Market Data
-
-```
-GET https://fapi.asterdex.com/fapi/v1/ticker/price?symbol=BTCUSDT
-GET https://fapi.asterdex.com/fapi/v1/klines?symbol=BTCUSDT&interval=15m&limit=100
-GET https://fapi.asterdex.com/fapi/v1/fundingRate?symbol=BTCUSDT
-GET https://fapi.asterdex.com/fapi/v1/depth?symbol=BTCUSDT&limit=20
-```
-
-With MCP: `aster_price({ symbol: "BTCUSDT" })`, `aster_klines(...)`, etc.
-
-### Step 2: Analyze with Strategy
-
-Feed market data into your trading strategy (see [references/trading-strategies.md](references/trading-strategies.md)). Your reasoning produces a trade decision:
-
-```json
-{
-  "action": "OPEN_LONG",
-  "symbol": "BTCUSDT",
-  "size_percent": 10,
-  "leverage": 10,
-  "stop_loss": 96500,
-  "take_profit": 99000,
-  "reasoning": "BTC showing bullish divergence on 15m RSI, funding negative, order book bid-heavy"
-}
-```
-
-### Step 3: Execute Trade
-
-**Set leverage** (if changed):
-```
-POST /leverage  { symbol: "BTCUSDT", leverage: 10 }
-```
-
-**Place order:**
-```
-POST /order  {
-  symbol: "BTCUSDT",
-  side: "BUY",
-  type: "MARKET",
-  quantity: 0.01
-}
-```
-
-**Set stop loss:**
-```
-POST /order  {
-  symbol: "BTCUSDT",
-  side: "SELL",
-  type: "STOP_MARKET",
-  stopPrice: 96500,
-  reduceOnly: true
-}
-```
-
-**Set take profit:**
-```
-POST /order  {
-  symbol: "BTCUSDT",
-  side: "SELL",
-  type: "TAKE_PROFIT_MARKET",
-  stopPrice: 99000,
-  reduceOnly: true
-}
-```
-
-### Step 4: Monitor & Adjust
-
-Check positions periodically:
-```
-GET /positionRisk?symbol=BTCUSDT
-GET /openOrders?symbol=BTCUSDT
-```
-
-Adjust stops, take partials, or close based on evolving market conditions.
-
-### Step 5: Log Trade
-
-Write to `memory/trades-YYYY-MM-DD.md`:
-
-```markdown
-## BTCUSDT LONG Ã¢â‚¬" 2026-03-02 14:30 PST
-- Entry: $97,250 | Size: 0.01 BTC | Leverage: 10x
-- Stop: $96,500 | TP: $99,000
-- Reasoning: Bullish RSI divergence on 15m, negative funding
-- Status: OPEN
-- PnL: Ã¢â‚¬"
-```
-
-Update `MEMORY.md` with cumulative stats.
-
-### API Authentication (for direct calls)
-
-```javascript
-const crypto = require('crypto');
-const timestamp = Date.now();
-const queryString = `symbol=BTCUSDT&timestamp=${timestamp}`;
-const signature = crypto.createHmac('sha256', API_SECRET).update(queryString).digest('hex');
-// Add header: X-MBX-APIKEY: <your key>
-// Append: &signature=<signature>
-```
-
-Full API reference: [references/aster-api.md](references/aster-api.md)
-
-## Risk Configuration
-
-All risk parameters are **customizable per user** via the `### Clawster Config` section in TOOLS.md. If a parameter is not configured, the default value applies. The agent reads this config on every trading cycle.
-
-### Full Config Schema
+Read from `### Clawster Config` in TOOLS.md each cycle. Defaults apply if omitted.
 
 | Parameter | Default | Description |
 |-----------|---------|-------------|
-| `agent_id` | *(required)* | Your ERC-8004 agent ID |
-| `trading_pairs` | `BTCUSDT, ETHUSDT` | Comma-separated list of pairs to trade |
-| `max_leverage` | `10` | Maximum leverage multiplier. Scalpers may increase to 20 |
-| `max_position_pct` | `20` | Max position size per trade as % of account balance |
-| `max_concurrent` | `3` | Max number of open positions at once. Reduce if account < $1000 |
-| `stop_loss` | `required` | Whether stop loss is required on every trade. **Ã¢Å¡Â Ã¯Â¸Â WARNING: Setting this to anything other than `required` removes your primary loss protection. You can lose your entire position. Do not disable unless you fully understand the risk.** |
-| `daily_loss_pct` | `5` | Max daily loss as % of account. Trading stops when hit |
-| `max_drawdown_pct` | `15` | Max total drawdown as % of account. Agent pauses and reassesses |
-| `max_risk_per_trade` | `2` | Max risk per trade as % of account balance |
-| `cooldown_after_losses` | `3` | Number of consecutive losses before cooldown triggers |
-| `cooldown_minutes` | `60` | Minutes to pause trading after cooldown triggers |
-| `max_daily_trades` | `50` | Maximum number of trades per day (prevents overtrading) |
-| `strategy` | `trend_follower` | Strategy name (see references/trading-strategies.md) |
+| `agent_id` | *(required)* | ERC-8004 agent ID — registered during installation |
+| `trading_pairs` | `BTCUSDT, ETHUSDT` | Pairs to trade (comma-separated) |
+| `max_leverage` | `10` | Max leverage multiplier |
+| `max_position_pct` | `20` | Max position size as % of balance |
+| `max_concurrent` | `3` | Max simultaneous open positions |
+| `stop_loss` | `required` | Set to `required` to enforce SL on every trade |
+| `daily_loss_pct` | `5` | Max daily loss % — halt trading when hit |
+| `max_drawdown_pct` | `15` | Max total drawdown % — pause and reassess |
+| `max_risk_per_trade` | `2` | Max risk per trade as % of balance |
+| `cooldown_after_losses` | `3` | Consecutive losses before cooldown |
+| `cooldown_minutes` | `60` | Cooldown duration in minutes |
+| `max_daily_trades` | `50` | Daily trade cap (resets midnight UTC) |
+| `strategy` | `trend_follower` | Built-in strategy name |
+| `strategy_prompt` | *(none)* | Freeform natural language strategy — **overrides `strategy` if set** |
 
-### Parameter Details
+**strategy_prompt**: Write your trading logic in plain English. Describe entry/exit conditions, indicators, timeframes, risk approach. The agent uses this as its decision-making brain, ignoring the built-in strategy entirely.
 
-**Position sizing formula:**
+## Config Validation Rules
+
+These limits are enforced before any trading begins:
+- **max_leverage**: Must be between 1-125
+- **max_position_pct**: Must be between 1-100
+- **daily_loss_pct**: Must be between 1-50
+- **stop_loss**: Always required (never skip SL orders)
+
+## Core Trading Loop
+
+Execute this loop each cycle (cron, heartbeat, or manual trigger):
+
+1. **Read config** from TOOLS.md
+2. **Check balance** — read `aster-api-account-v1`, call GET /fapi/v2/balance
+3. **Check open positions** — call GET /fapi/v1/positionRisk
+4. **Check daily PnL** — read from `memory/clawster-state.json`. If `daily_loss_pct` exceeded → stop trading, log reason
+5. **Check cooldown** — if in cooldown period → skip to step 10
+6. **Check trade count** — if `max_daily_trades` reached → skip to step 10
+7. **Fetch market data** — read `aster-api-market-data-v1`, get price/klines/funding/depth for each configured pair
+8. **Apply strategy** — use `strategy_prompt` if set, else apply built-in `strategy`. Produce a trade signal or NO_TRADE
+9. **If signal**: validate risk (see Risk Engine) → read `aster-api-trading-v1` → place order → set SL/TP → log trade
+10. **Update state** — write to `memory/clawster-state.json` and `memory/trades-YYYY-MM-DD.md`
+
+## Position State Machine
+
+Each position moves through these states:
+
+| State | Action |
+|-------|--------|
+| `ANALYZING` | Evaluating market data for entry signals |
+| `ENTRY_SIGNAL` | Signal detected — validate risk constraints |
+| `ORDER_PLACED` | Order submitted — poll until filled or expired |
+| `POSITION_OPEN` | Filled — set SL/TP orders immediately |
+| `MONITORING` | Track price, adjust stops, check exit conditions |
+| `EXIT_SIGNAL` | Exit condition met — place close order |
+| `CLOSING` | Close order submitted — poll until filled |
+| `CLOSED` | Done — log final PnL, update stats |
+
+**Recovery on restart**: On startup, call GET /fapi/v1/positionRisk. If positions exist that aren't in `memory/clawster-state.json`, adopt them at MONITORING state. Verify SL/TP orders exist via GET /fapi/v1/openOrders — if missing, place them immediately.
+
+## Error Recovery
+
+| Error | Action |
+|-------|--------|
+| Order rejected | Read rejection reason. Adjust quantity/price. Retry once. If rejected again, log and skip. |
+| API timeout | Wait 5 seconds, retry. Max 3 retries. |
+| Rate limited | Read `aster-api-errors-v1` for backoff rules. Wait and retry. |
+| Position stuck (no SL/TP filling) | Place market close order with `reduceOnly: true` |
+| Balance insufficient | Log warning, skip trade, notify user |
+| Unknown error | Log full error details, skip trade, continue loop |
+
+## Risk Engine
+
+These are **hard rules**. Do not override them.
+
+- **NEVER** open a position without a stop loss order (unless `stop_loss` != `required`)
+- **NEVER** exceed `max_position_pct` of account balance per position
+- **NEVER** exceed `max_concurrent` open positions
+- **ALWAYS** check daily PnL before opening a new trade
+- **ALWAYS** log every trade to `memory/trade-log.jsonl`
+- **ALWAYS** verify balance is sufficient before placing an order
+
+**Position sizing**:
 ```
-size = (account_balance Ãƒ"” max_position_pct / 100) / entry_price Ãƒ"” leverage
+size = (balance × max_position_pct / 100) / entry_price × leverage
+risk = position_size × abs(entry - stop_loss) / entry
 ```
+If `risk` exceeds `max_risk_per_trade` % of balance, reduce size until it fits.
 
-**Risk per trade:**
-```
-risk = position_size Ãƒ"” (entry - stop_loss) / entry
-```
-Must stay under `max_risk_per_trade` % of account.
-
-**Cooldown system:** After `cooldown_after_losses` consecutive losing trades, the agent pauses all trading for `cooldown_minutes` minutes. This prevents tilt-driven overtrading. The cooldown resets after a winning trade or after the timer expires.
-
-**Daily trade limit:** The `max_daily_trades` counter resets at midnight UTC. If hit, no new positions are opened until the next day. Existing positions continue to be managed (stop adjustments, closes).
-
-### Example TOOLS.md Config
-
-```markdown
-### Clawster Config
-- agent_id: 42
-- trading_pairs: BTCUSDT, ETHUSDT
-- max_leverage: 10
-- max_position_pct: 20
-- max_concurrent: 3
-- stop_loss: required
-- daily_loss_pct: 5
-- max_drawdown_pct: 15
-- max_risk_per_trade: 2
-- cooldown_after_losses: 3
-- cooldown_minutes: 60
-- max_daily_trades: 50
-- strategy: trend_follower
-```
-
-Any parameter omitted from your config uses the default value shown above.
-
-## Cron Integration
-
-Set up periodic market analysis using OpenClaw's cron system:
-
-```
-# Check positions every 5 minutes
-*/5 * * * *  Check all open positions on Aster DEX. Adjust stops if needed. Log status.
-
-# Full market scan every hour
-0 * * * *  Analyze BTCUSDT, ETHUSDT, BNBUSDT on 1h candles. Generate trade decisions if setups exist.
-
-# Daily PnL summary at midnight
-0 0 * * *  Calculate daily PnL, update MEMORY.md, review winning/losing trades for lessons.
-```
+**Cooldown**: After `cooldown_after_losses` consecutive losses, pause all new trades for `cooldown_minutes`. Existing positions continue to be managed. Cooldown resets after a win or timer expiry.
 
 ## Memory Integration
 
-### Trade Logging
+| File | Content |
+|------|---------|
+| `memory/trade-log.jsonl` | Every trade: symbol, direction, entry/exit, size, leverage, SL/TP, reasoning, PnL, status |
+| `memory/clawster-state.json` | Current positions, daily PnL, trade count, cooldown timer, consecutive losses |
+| `MEMORY.md` | Weekly summary: win rate, total PnL, strategy learnings, parameter adjustments |
 
-Every trade gets logged to `memory/trades-YYYY-MM-DD.md` with:
-- Entry/exit prices, size, leverage
-- Stop loss and take profit levels
-- Reasoning for the trade
-- Outcome and PnL
-
-### PnL Tracking in MEMORY.md
-
-Maintain a running section:
-
-```markdown
-## Trading Stats
-- Total trades: 47
-- Win rate: 62%
-- Total PnL: +$1,234.56
-- Best trade: ETHUSDT SHORT +$450 (2026-02-28)
-- Worst trade: BTCUSDT LONG -$180 (2026-02-25)
-- Current streak: 3 wins
+**State JSON structure**:
+```json
+{
+  "positions": [{"symbol": "BTCUSDT", "side": "LONG", "state": "MONITORING", "entryPrice": 97250}],
+  "dailyPnL": -1.2,
+  "dailyTradeCount": 5,
+  "consecutiveLosses": 1,
+  "cooldownUntil": null,
+  "lastUpdated": "2026-03-06T16:43:00Z"
+}
 ```
 
-### Learning Loop
+## Cron Integration
 
-After each trading day, review:
-1. Which setups worked? Which didn't?
-2. Were stops too tight or too loose?
-3. Did you overtrade?
-4. Update strategy parameters based on learnings.
+Add these to OpenClaw cron for autonomous operation:
 
-## MCP Integration (Optional)
+**Position monitor (every 5 min)**:
+```json
+{
+  "name": "clawster-position-monitor",
+  "schedule": { "kind": "cron", "expr": "*/5 * * * *" },
+  "payload": { "kind": "systemEvent", "text": "Check all open Aster positions. Adjust stops if needed. Update memory/clawster-state.json." },
+  "sessionTarget": "main",
+  "enabled": true
+}
+```
 
-`@clawster/aster-mcp` is a **separate optional package** (located at `../aster-mcp/`). If installed, you get direct tool access:
+**Market scan (every hour)**:
+```json
+{
+  "name": "clawster-market-scan",
+  "schedule": { "kind": "cron", "expr": "0 * * * *" },
+  "payload": { "kind": "systemEvent", "text": "Run CLAWSTER trading loop: analyze configured pairs, generate signals, execute trades if setups exist." },
+  "sessionTarget": "main",
+  "enabled": true
+}
+```
 
-| Tool | Description |
-|------|-------------|
-| `aster_ping` | Health check |
-| `aster_price` | Get current price |
-| `aster_klines` | Get candle data |
-| `aster_depth` | Order book |
-| `aster_funding_rate` | Funding rates |
-| `aster_account` | Balances & positions |
-| `aster_place_order` | Place an order |
-| `aster_cancel_order` | Cancel an order |
-| `aster_positions` | Position details |
-| `aster_set_leverage` | Set leverage |
-| `aster_open_orders` | List open orders |
+**Daily summary (midnight UTC)**:
+```json
+{
+  "name": "clawster-daily-summary",
+  "schedule": { "kind": "cron", "expr": "0 0 * * *", "tz": "UTC" },
+  "payload": { "kind": "systemEvent", "text": "Calculate daily CLAWSTER PnL. Update MEMORY.md with summary. Review wins/losses for strategy improvements. Reset daily counters in clawster-state.json." },
+  "sessionTarget": "main",
+  "enabled": true
+}
+```
 
-Without MCP, use `fetch()` or `curl` with HMAC-SHA256 auth. See [references/aster-api.md](references/aster-api.md).
+## Heartbeat Integration
 
-## Quick Reference Ã¢â‚¬" Common Operations
+Add to HEARTBEAT.md:
+```
+- Check open Aster positions (GET /fapi/v1/positionRisk). If unrealized loss > 50% of max_drawdown_pct, alert user.
+- If clawster-state.json shows cooldown active, note time remaining.
+```
 
-**Check price:** `GET /ticker/price?symbol=BTCUSDT`
+## Quick Reference — Key Endpoints
 
-**Open long:** `POST /order { symbol, side: "BUY", type: "MARKET", quantity }`
+All endpoints use base URL `https://fapi.asterdex.com`. Read `aster-api-auth-v1` for signing.
 
-**Open short:** `POST /order { symbol, side: "SELL", type: "MARKET", quantity }`
+| Operation | Method | Path |
+|-----------|--------|------|
+| Price | GET | /fapi/v1/ticker/price |
+| Klines | GET | /fapi/v1/klines |
+| Depth | GET | /fapi/v1/depth |
+| Funding rate | GET | /fapi/v1/fundingRate |
+| Place order | POST | /fapi/v1/order |
+| Cancel order | DELETE | /fapi/v1/order |
+| Open orders | GET | /fapi/v1/openOrders |
+| Set leverage | POST | /fapi/v1/leverage |
+| Position risk | GET | /fapi/v1/positionRisk |
+| Balance | GET | /fapi/v2/balance |
 
-**Close position:** `POST /order { symbol, side: opposite, type: "MARKET", quantity, reduceOnly: true }`
-
-**Set leverage:** `POST /leverage { symbol, leverage }`
-
-**Check position:** `GET /positionRisk?symbol=BTCUSDT`
-
-**Cancel all orders:** `DELETE /order { symbol }` (loop through openOrders)
+**Note**: If MCP tools (`aster_price`, `aster_place_order`, etc.) are available, prefer them over direct HTTP calls.

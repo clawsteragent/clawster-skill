@@ -1,322 +1,272 @@
-<p align="center">
-  <h1 align="center">🦀 CLAWSTER</h1>
-  <p align="center">
-    <strong>Autonomous Perpetual Futures Trading for AI Agents</strong>
-  </p>
-  <p align="center">
-    <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
-    <a href="https://openclaw.com"><img src="https://img.shields.io/badge/OpenClaw-Skill-blueviolet" alt="OpenClaw Skill"></a>
-    <img src="https://img.shields.io/badge/Node.js-18%2B-green" alt="Node.js 18+">
-    <a href="https://asterdex.com"><img src="https://img.shields.io/badge/Aster-DEX-orange" alt="Aster DEX"></a>
-    <a href="https://clawster.com"><img src="https://img.shields.io/badge/clawster.com-🦀-red" alt="clawster.com"></a>
-  </p>
-</p>
+```
+   ▄████▄   ██▓    ▄▄▄       █     █░  ██████ ▄▄▄█████▓▓█████  ██▀███  
+  ▒██▀ ▀█  ▓██▒   ▒████▄    ▓█░ █ ░█░▒██    ▒ ▓  ██▒ ▓▒▓█   ▀ ▓██ ▒ ██▒
+  ▒▓█    ▄ ▒██░   ▒██  ▀█▄  ▒█░ █ ░█ ░ ▓██▄   ▒ ▓██░ ▒░▒███   ▓██ ░▄█ ▒
+  ▒▓▓▄ ▄██▒▒██░   ░██▄▄▄▄██ ░█░ █ ░█   ▒   ██▒░ ▓██▓ ░ ▒▓█  ▄ ▒██▀▀█▄  
+  ▒ ▓███▀ ░░██████▒▓█   ▓██▒░░██▒██▓ ▒██████▒▒  ▒██▒ ░ ░▒████▒░██▓ ▒██▒
+  ░ ░▒ ▒  ░░ ▒░▓  ░▒▒   ▓▒█░░ ▓░▒ ▒  ▒ ▒▓▒ ▒ ░  ▒ ░░   ░░ ▒░ ░░ ▒▓ ░▒▓░
+    ░  ▒   ░ ░ ▒  ░ ▒   ▒▒ ░  ▒ ░ ░  ░ ░▒  ░ ░    ░     ░ ░  ░  ░▒ ░ ▒░
+  ░          ░ ░    ░   ▒     ░   ░  ░  ░  ░    ░         ░     ░░   ░ 
+  ░ ░          ░  ░     ░  ░    ░          ░              ░  ░   ░     
+  ░                                                                    
+```
+
+[![OpenClaw](https://img.shields.io/badge/OpenClaw-Compatible-blue.svg)](https://openclaw.com)
+[![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
+[![Aster DEX](https://img.shields.io/badge/Aster_DEX-Trading-purple.svg)](https://aster.org)
+[![ERC-8004](https://img.shields.io/badge/ERC--8004-Registered-orange.svg)](https://eips.ethereum.org/EIPS/eip-8004)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+**Autonomous perpetual futures trading for AI agents**
+
+🌐 **Website**: [clawster.org](https://clawster.org)
 
 ---
 
-**CLAWSTER** turns any [OpenClaw](https://openclaw.com) AI agent into an **autonomous perpetual futures trader** on [Aster DEX](https://asterdex.com). One skill install, conversational setup, 24/7 autonomous trading.
+## 🎯 Features
 
-Your agent gets an **on-chain identity** via [ERC-8004](https://erc8004.org), connects to Aster DEX for perpetual futures, and trades autonomously using strategies you define in plain English.
+🤖 **Autonomous Trading** — No human intervention required  
+📊 **Multi-Market Support** — Trade BTC, ETH, and more perpetual futures  
+🛡️ **Risk Management** — Hard-coded safety limits and position sizing  
+⚡ **Real-time Execution** — WebSocket streaming for instant market response  
+🔐 **ERC-8004 Compliant** — Blockchain-registered AI agent identity  
+📈 **Strategy Engine** — Trend following, scalping, and custom strategies  
+💰 **P&L Tracking** — Comprehensive profit/loss monitoring  
+🔄 **Auto-rebalancing** — Dynamic position management  
 
-> *"Set up CLAWSTER"* → register on-chain → connect wallet → start trading. That's it.
+## 🏗️ Architecture
 
----
+Clawster follows a **"brain + manuals"** architecture:
 
-## ✨ Features
+### 🧠 The Brain
+- **`SKILL.md`** — Core trading logic, risk management, and state machine
+- Main decision engine that orchestrates all trading operations
 
-- **🤖 Autonomous Execution** — Agent reasons about markets, makes decisions, and executes trades without human intervention
-- **🔗 On-Chain ERC-8004 Identity** — Every agent gets a verifiable on-chain NFT identity on BSC
-- **🛡️ Deterministic Risk Controls** — Hard-coded limits on leverage, position size, drawdown, and daily losses
-- **💬 Natural Language Strategies** — Define your trading strategy in plain English — no code required
-- **📝 Trade Logging & Learning** — Every trade is logged with reasoning, and the agent learns from its history
-- **⏰ Cron-Based Scheduling** — Periodic market scans, position checks, and daily PnL reports on autopilot
+### 📚 The Manuals  
+- **13 aster-api-* skills** — API reference documentation loaded on demand
+- Sourced from [asterdex/aster-skills-hub](https://github.com/asterdex/aster-skills-hub)
+- Includes authentication, market data, trading, websockets, and error handling
 
----
+This separation ensures the core logic stays focused while API details remain modular and updateable.
 
 ## 🚀 Quick Start
 
-**1. Install the skill**
-```
-Copy this folder to your OpenClaw skills directory
-```
-
-**2. Set up**
-```
-Tell your agent: "Set up CLAWSTER"
+### 1. Clone & Enter
+```bash
+git clone https://github.com/clawsteragent/clawster-skill.git
+cd clawster-skill
 ```
 
-**3. Start trading**
+### 2. Install & Configure  
+```bash
+node install.js
 ```
-Tell your agent: "Scan the market and trade"
-```
+This handles:
+- ERC-8004 agent registration on BSC
+- Cloning of aster-api-* skills from GitHub
+- npm dependency installation
+- .env configuration setup
 
-That's it. Your agent handles ERC-8004 registration, walks you through wallet connection, and starts trading autonomously.
-
----
-
-## 🔧 How It Works
-
-The setup is a **6-step guided flow** — your agent walks you through each step conversationally:
-
-| Step | Action | Type |
-|------|--------|------|
-| **1** | Provide your BSC private key | 🗝️ You provide |
-| **2** | Agent registers ERC-8004 on-chain identity | 🤖 Automatic |
-| **3** | Connect wallet to Aster DEX + deposit USDT | 👤 Manual (browser) |
-| **4** | Generate Aster API key + secret | 👤 Manual (browser) |
-| **5** | Store credentials in agent config | 🤖 Automatic |
-| **6** | Configure trading strategy & risk parameters | 💬 Conversational |
-
-After setup, the agent operates autonomously — fetching market data, analyzing setups, placing trades, managing positions, and logging everything.
-
----
-
-## 🔑 One Wallet Architecture
-
-CLAWSTER uses a **single BSC wallet** for everything:
-
-```
-┌─────────────────────────────────────────┐
-│              Your BSC Wallet            │
-│                                         │
-│  ┌─────────────┐  ┌──────────────────┐  │
-│  │  ERC-8004   │  │   Aster DEX      │  │
-│  │  Identity   │  │   Trading        │  │
-│  │  (on-chain) │  │   (API key)      │  │
-│  └─────────────┘  └──────────────────┘  │
-│                                         │
-│  BNB (gas) + USDT (trading capital)     │
-└─────────────────────────────────────────┘
+### 3. Start Trading
+```bash
+openclaw gateway restart
+# Chat with Clawster to begin trading!
 ```
 
-- **One wallet** registers the agent on ERC-8004 and connects to Aster DEX
-- **BNB** covers gas for the registration transaction (~0.005 BNB)
-- **USDT** is your trading capital, deposited into Aster DEX
-- **Private key** is used once for ERC-8004 registration, then the agent uses API keys for trading
+## 📦 Installation Details
 
----
+The `install.js` script performs these operations:
 
-## 🛡️ Risk Controls
+1. **ERC-8004 Registration**
+   - Registers your agent identity on Binance Smart Chain
+   - Creates immutable on-chain proof of AI agent existence
+   - Requires ~0.005 BNB for gas fees
 
-Every parameter is configurable via your agent's `TOOLS.md`. Sane defaults protect your capital:
+2. **Skill Dependencies**  
+   - Clones 13 aster-api-* skills from [aster-skills-hub](https://github.com/asterdex/aster-skills-hub)
+   - Installs to `~/.openclaw/skills/` directory
+   - Skills loaded dynamically as needed
+
+3. **Dependencies**
+   - Runs `npm install --production` 
+   - Installs ethers.js for blockchain interactions
+   - Sets up secure file permissions
+
+4. **Environment Setup**
+   - Creates `.env` with API credentials
+   - Configures trading parameters
+   - Sets secure file permissions (600 on Unix systems)
+
+## ⚙️ Configuration
+
+Edit your configuration in `TOOLS.md` under `### Clawster Config`:
+
+```markdown
+### Clawster Config
+- agent_id: 12345
+- trading_pairs: BTCUSDT,ETHUSDT,SOLUSDT
+- max_leverage: 10
+- max_position_pct: 20
+- max_concurrent: 3
+- stop_loss: required
+- daily_loss_pct: 5
+- max_drawdown_pct: 15
+- max_risk_per_trade: 2
+- cooldown_after_losses: 3
+- cooldown_minutes: 60
+- max_daily_trades: 50
+- strategy: trend_follower
+```
+
+### Parameters
 
 | Parameter | Default | Description |
 |-----------|---------|-------------|
+| `agent_id` | *(required)* | ERC-8004 agent ID from registration |
+| `trading_pairs` | `BTCUSDT,ETHUSDT` | Comma-separated trading pairs |
 | `max_leverage` | `10` | Maximum leverage multiplier |
-| `max_position_pct` | `20` | Max position size as % of account balance |
+| `max_position_pct` | `20` | Max position size as % of balance |
 | `max_concurrent` | `3` | Max simultaneous open positions |
-| `stop_loss` | `required` | ⚠️ Stop loss on every trade (do not disable) |
-| `daily_loss_pct` | `5` | Max daily loss % — trading halts when hit |
-| `max_drawdown_pct` | `15` | Max total drawdown % — agent pauses and reassesses |
-| `max_risk_per_trade` | `2` | Max risk per trade as % of account |
-| `cooldown_after_losses` | `3` | Consecutive losses before cooldown triggers |
-| `cooldown_minutes` | `60` | Minutes to pause after cooldown triggers |
-| `max_daily_trades` | `50` | Max trades per day (prevents overtrading) |
+| `stop_loss` | `required` | Force stop-loss on all trades |
+| `daily_loss_pct` | `5` | Daily loss limit (% of balance) |
+| `max_drawdown_pct` | `15` | Maximum portfolio drawdown |
+| `max_risk_per_trade` | `2` | Risk per trade (% of balance) |
+| `cooldown_after_losses` | `3` | Consecutive losses before cooldown |
+| `cooldown_minutes` | `60` | Minutes to wait after loss streak |
+| `max_daily_trades` | `50` | Maximum trades per day |
+| `strategy` | `trend_follower` | Trading strategy name |
 
-**Position sizing formula:**
-```
-size = (account_balance × max_position_pct / 100) / entry_price × leverage
-```
+## 🛡️ Risk Management
 
-**Cooldown system:** After N consecutive losses, the agent pauses trading for the configured cooldown period. Resets after a win or timer expiry.
+Clawster enforces **hard-coded safety limits** that cannot be overridden:
 
----
+### Position Limits
+- ✅ Max 20% of balance per position
+- ✅ Max 3 concurrent positions  
+- ✅ Max 10x leverage
+- ✅ Mandatory stop-loss on all trades
 
-## 📊 Trading Strategies
+### Daily Limits  
+- ✅ 5% daily loss limit (auto-shutdown)
+- ✅ 50 maximum trades per day
+- ✅ 3-strike cooldown system
 
-Strategies are defined in **plain English** — no code, no config files. Just tell your agent how you want to trade.
+### Portfolio Protection
+- ✅ 15% maximum drawdown limit
+- ✅ Emergency liquidation at risk limits
+- ✅ Real-time P&L monitoring
 
-### 🐢 Conservative Trend Follower
-> *"Trade BTC and ETH only. Follow the 1-hour trend using EMA crossovers. Use 5x leverage max, 10% position size. Only enter on pullbacks to support. Always set stop loss at the recent swing low."*
+## 🔄 Trading Loop
 
-### ⚡ Momentum Scalper
-> *"Scalp BTCUSDT on 5m candles. Enter on volume spikes with RSI confirmation. 15x leverage, tight stops at 0.3%. Take profit at 0.5-1%. Max 20 trades per day."*
-
-### 📈 Mean Reversion
-> *"Trade when BTC RSI drops below 30 on the 15m chart. Enter long with 10x leverage. Stop loss 2% below entry. Take profit when RSI returns above 50. Only trade during high volume periods."*
-
-### 💰 Funding Rate Hunter
-> *"Monitor funding rates across all pairs. When funding is deeply negative (< -0.05%), open a long position. When funding is deeply positive (> 0.05%), open a short. Collect funding payments every 8 hours. Use 5x leverage with wide stops."*
-
----
-
-## 🔄 Trading Workflow
-
-The agent executes an autonomous loop:
+Clawster operates in a continuous cycle:
 
 ```
-┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐
-│  FETCH   │───▶│ ANALYZE  │───▶│ EXECUTE  │───▶│ MONITOR  │───▶│   LOG    │
-│  Market  │    │ Strategy │    │  Trade   │    │ Position │    │  Trade   │
-│  Data    │    │  Logic   │    │  Order   │    │  Mgmt    │    │  Memory  │
-└──────────┘    └──────────┘    └──────────┘    └──────────┘    └──────────┘
-      ▲                                                               │
-      └───────────────────────────────────────────────────────────────┘
+🔍 SCAN → 📊 ANALYZE → ⚡ EXECUTE → 👁️ MONITOR → 🚪 EXIT
+    ↑                                                  ↓
+    ←←←←←←←←←← REPEAT ←←←←←←←←←←←←←←←←←←←←←←←←←←
 ```
 
-1. **Fetch** — Pull prices, klines, order book, funding rates from Aster DEX
-2. **Analyze** — Apply your strategy to market data, reason about setups
-3. **Execute** — Place orders with calculated position size, leverage, stops
-4. **Monitor** — Track open positions, adjust stops, take partials
-5. **Log** — Record every trade with reasoning, entry/exit, PnL
+### 1. 🔍 **Scan Markets**
+- Fetch real-time price data
+- Calculate technical indicators
+- Identify trading opportunities
 
----
+### 2. 📊 **Analyze Signals**  
+- Apply strategy rules (trend following, scalping, etc.)
+- Risk assessment and position sizing
+- Entry/exit point calculation
 
-## 📡 Market Data
+### 3. ⚡ **Execute Orders**
+- Place orders via Aster DEX API
+- Real-time order management
+- Immediate confirmation handling
 
-The agent uses comprehensive market data from Aster DEX:
+### 4. 👁️ **Monitor Positions**
+- Track P&L in real-time
+- Adjust stop-losses dynamically  
+- Risk limit enforcement
 
-| Data | Endpoint | Use |
-|------|----------|-----|
-| **Current Price** | `/ticker/price` | Entry/exit decisions |
-| **Klines (Candles)** | `/klines` — 15 intervals (1m to 1M) | Technical analysis |
-| **Order Book** | `/depth` | Liquidity & support/resistance |
-| **Funding Rates** | `/fundingRate` | Funding rate strategy |
-| **24h Statistics** | `/ticker/24hr` | Volume, volatility |
-| **Open Interest** | `/openInterest` | Market sentiment |
-| **Recent Trades** | `/trades` | Momentum detection |
-
----
-
-## 📝 Trade Logging & Memory
-
-### Trade Journal
-
-Every trade is logged to `memory/trades-YYYY-MM-DD.md`:
-
-```markdown
-## BTCUSDT LONG — 2026-03-02 14:30 PST
-- Entry: $97,250 | Size: 0.01 BTC | Leverage: 10x
-- Stop: $96,500 | TP: $99,000
-- Reasoning: Bullish RSI divergence on 15m, negative funding
-- Status: CLOSED — TP Hit
-- PnL: +$175.00
-```
-
-### PnL Tracking
-
-Running statistics maintained in `MEMORY.md`:
-
-```markdown
-## Trading Stats
-- Total trades: 47
-- Win rate: 62%
-- Total PnL: +$1,234.56
-- Best trade: ETHUSDT SHORT +$450
-- Current streak: 3 wins
-```
-
-### Learning Loop
-
-After each trading day, the agent reviews:
-- Which setups worked and which didn't
-- Were stops too tight or too loose
-- Overtrading patterns
-- Strategy parameter adjustments based on outcomes
-
----
-
-## ⏰ Cron Integration
-
-Set up periodic autonomous trading with OpenClaw's cron system:
-
-```bash
-# Check positions every 5 minutes
-*/5 * * * *  Check all open positions on Aster DEX. Adjust stops if needed.
-
-# Full market scan every hour
-0 * * * *  Analyze BTCUSDT, ETHUSDT, BNBUSDT. Generate trade decisions if setups exist.
-
-# Daily PnL summary at midnight
-0 0 * * *  Calculate daily PnL, update MEMORY.md, review trades for lessons.
-```
-
----
-
-## 🔌 MCP Integration
-
-For direct tool access (optional), install the companion [`aster-mcp`](https://github.com/clawsteragent/aster-mcp) package:
-
-```bash
-npm install -g @clawster/aster-mcp
-```
-
-This gives your agent MCP tools like `aster_price`, `aster_klines`, `aster_place_order`, `aster_positions`, and more — no manual HTTP/HMAC auth needed.
-
-Without MCP, the agent uses `fetch()` or `curl` with HMAC-SHA256 authentication directly against the Aster API. Both approaches work.
-
----
+### 5. 🚪 **Exit Strategy**
+- Take profit at targets
+- Stop-loss execution
+- Emergency position closure
 
 ## 🛠️ Scripts
 
-### `scripts/setup-agent.js`
-
-Interactive setup script for ERC-8004 registration:
-
-```bash
-cd skill/clawster && npm install
-node scripts/setup-agent.js
-```
-
-- Prompts for BSC private key
-- Checks BNB balance
-- Sends `register(tokenURI)` to the ERC-8004 registry
-- Extracts and displays your agent ID
-
-### `scripts/check-balance.js`
-
-Check your Aster DEX account balances and open positions:
-
+### Balance Checker
 ```bash
 node scripts/check-balance.js
 ```
+- Displays current USDT balance on Aster DEX
+- Shows available margin and position status
+- Verifies API connectivity
 
-- Reads credentials from env vars or TOOLS.md
-- Displays USDT balance, unrealized PnL, and open positions
+## 📚 Documentation
 
----
+Comprehensive documentation available in [`docs/`](docs/):
 
-## 📁 Project Structure
+| Document | Description |
+|----------|-------------|
+| [`architecture.md`](docs/architecture.md) | System design and component overview |
+| [`configuration.md`](docs/configuration.md) | Complete configuration reference |
+| [`cron-and-automation.md`](docs/cron-and-automation.md) | Automated trading schedules |
+| [`erc-8004.md`](docs/erc-8004.md) | Blockchain agent registration |
+| [`index.md`](docs/index.md) | Documentation index and quick links |
+| [`installation.md`](docs/installation.md) | Detailed installation guide |
+| [`memory-and-state.md`](docs/memory-and-state.md) | State management and persistence |
+| [`risk-management.md`](docs/risk-management.md) | Risk controls and safety systems |
+| [`skills-reference.md`](docs/skills-reference.md) | API skills reference guide |
+| [`trading-loop.md`](docs/trading-loop.md) | Trading algorithm deep dive |
 
-```
-clawster/
-├── SKILL.md              # OpenClaw skill definition (agent instructions)
-├── README.md             # This file
-├── package.json          # Node.js dependencies (ethers)
-├── .gitignore
-├── scripts/
-│   ├── setup-agent.js    # ERC-8004 registration script
-│   └── check-balance.js  # Balance & position checker
-└── references/
-    ├── aster-api.md      # Full Aster DEX API reference
-    ├── erc8004-auth.md   # ERC-8004 registry technical details
-    └── trading-strategies.md  # Strategy templates & examples
-```
+## 🔐 Authentication
 
----
+Clawster supports two authentication methods:
 
-## 📋 Requirements
+### v1 Authentication (Default - HMAC)
+- Uses API key + secret for HMAC-SHA256 signatures
+- Recommended for most users
+- Configured via environment variables
 
-- **[OpenClaw](https://openclaw.com)** — AI agent platform
-- **BSC Wallet** — With BNB (~0.005 for gas) + USDT (trading capital)
-- **Browser** — For Aster DEX wallet connection & API key generation (manual steps)
-- **Node.js 18+** — For setup and utility scripts
+### v3 Authentication (EIP-712 Wallet)  
+- Uses Ethereum wallet for cryptographic signatures
+- Advanced users with wallet integration
+- Requires additional setup
 
----
+**Default:** v1 HMAC authentication is used unless explicitly configured otherwise.
 
-## 🦀 Part of CLAWSTER
+## 🔗 Links
 
-CLAWSTER is an ecosystem for autonomous AI trading:
+- **🌐 Website**: [clawster.org](https://clawster.org)
+- **⚙️ OpenClaw**: [openclaw.com](https://openclaw.com)  
+- **📈 Aster DEX**: [aster.org](https://aster.org)
+- **🔗 ERC-8004 Standard**: [eips.ethereum.org/EIPS/eip-8004](https://eips.ethereum.org/EIPS/eip-8004)
+- **📚 Skills Hub**: [github.com/asterdex/aster-skills-hub](https://github.com/asterdex/aster-skills-hub)
+- **📊 BSC Explorer**: [bscscan.com](https://bscscan.com)
 
-| Component | Description | Link |
-|-----------|-------------|------|
-| **clawster-skill** | OpenClaw skill for autonomous trading (this repo) | [GitHub](https://github.com/clawsteragent/clawster-skill) |
-| **aster-mcp** | MCP server for Aster DEX API access | [GitHub](https://github.com/clawsteragent/aster-mcp) |
+## 🤝 Contributing
 
-🌐 [clawster.com](https://clawster.com)
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)  
+5. Open a Pull Request
 
----
+### Guidelines
+- Follow existing code style
+- Add tests for new features
+- Update documentation as needed
+- Ensure all safety limits remain intact
 
 ## 📄 License
 
-MIT — see [LICENSE](LICENSE) for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+<p align="center">
+  <strong>⚡ Ready to trade autonomously? Let Clawster handle the markets while you sleep. ⚡</strong>
+</p>
+
+<p align="center">
+  Made with 🤖 by the Clawster team
+</p>
