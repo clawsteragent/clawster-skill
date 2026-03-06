@@ -238,7 +238,7 @@ Clawster supports two authentication methods:
 
 - **🌐 Website**: [clawster.org](https://clawster.org)
 - **⚙️ OpenClaw**: [openclaw.com](https://openclaw.com)  
-- **📈 Aster DEX**: [aster.org](https://asterdex.com)
+- **📈 Aster DEX**: [asterdex.com](https://asterdex.com)
 - **🔗 ERC-8004 Standard**: [eips.ethereum.org/EIPS/eip-8004](https://eips.ethereum.org/EIPS/eip-8004)
 - **📚 Skills Hub**: [github.com/asterdex/aster-skills-hub](https://github.com/asterdex/aster-skills-hub)
 - **📊 BSC Explorer**: [bscscan.com](https://bscscan.com)
