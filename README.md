@@ -13,7 +13,7 @@
 
 [![OpenClaw](https://img.shields.io/badge/OpenClaw-Compatible-blue.svg)](https://openclaw.com)
 [![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
-[![Aster DEX](https://img.shields.io/badge/Aster_DEX-Trading-purple.svg)](https://aster.org)
+[![Aster DEX](https://img.shields.io/badge/Aster_DEX-Trading-purple.svg)](https://asterdex.com)
 [![ERC-8004](https://img.shields.io/badge/ERC--8004-Registered-orange.svg)](https://eips.ethereum.org/EIPS/eip-8004)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -238,7 +238,7 @@ Clawster supports two authentication methods:
 
 - **🌐 Website**: [clawster.org](https://clawster.org)
 - **⚙️ OpenClaw**: [openclaw.com](https://openclaw.com)  
-- **📈 Aster DEX**: [aster.org](https://aster.org)
+- **📈 Aster DEX**: [aster.org](https://asterdex.com)
 - **🔗 ERC-8004 Standard**: [eips.ethereum.org/EIPS/eip-8004](https://eips.ethereum.org/EIPS/eip-8004)
 - **📚 Skills Hub**: [github.com/asterdex/aster-skills-hub](https://github.com/asterdex/aster-skills-hub)
 - **📊 BSC Explorer**: [bscscan.com](https://bscscan.com)
